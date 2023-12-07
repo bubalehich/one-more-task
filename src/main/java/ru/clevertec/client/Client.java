@@ -1,6 +1,7 @@
 package ru.clevertec.client;
 
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import ru.clevertec.data.Request;
 import ru.clevertec.data.Response;
 import ru.clevertec.exception.ClientException;
@@ -38,8 +39,8 @@ public class Client {
         return data;
     }
 
-    public AtomicInteger getAccumulator() {
-        return accumulator;
+    public int getAccumulatorValue() {
+        return accumulator.get();
     }
 
     public void doSend() {
@@ -70,7 +71,7 @@ public class Client {
         destroy();
     }
 
-    private void incrementAccumulator(Future<Response> future) {
+    private void incrementAccumulator(@NotNull Future<Response> future) {
         try {
             accumulator.getAndAdd(future.get().message());
             log.info(String.format("CLIENT: Response received: %d", future.get().message()));
